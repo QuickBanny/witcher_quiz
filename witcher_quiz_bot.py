@@ -46,6 +46,8 @@ def start(update: Update, context: CallbackContext) -> int:
         f'Для просмотра правил введите /help\n'
         f'Для просмотра вашего счета введите /score'
     )
+    # Также сразу покажем правила квиза
+    help_command(update, context)
     return ConversationHandler.END
 
 def _build_all_levels_plan() -> list:
