@@ -24,18 +24,6 @@ user_difficulty = {}
 user_question_list = {}   # user_id -> list of 10 questions prepared for the session
 user_question_index = {}  # user_id -> current index in the prepared list (0..9)
 
-# Cat images for final result
-HAPPY_CAT_URLS = [
-    'https://opis-cdn.tinkoffjournal.ru/mercury/03-cats-mem.ywhteipqsbyt..gif',
-    'https://opis-cdn.tinkoffjournal.ru/mercury/08-cats-mem.qzg8ghiayj9s..gif',
-    'https://opis-cdn.tinkoffjournal.ru/mercury/17-cats-mem.zlgxt6gqj3pj..gif',
-]
-SAD_CAT_URLS = [
-    'https://opis-cdn.tinkoffjournal.ru/mercury/14-cats-mem.ej4ktdsgtcdd..gif',
-    'https://opis-cdn.tinkoffjournal.ru/mercury/19-cats-mem.y9sdgxl6xbip..gif',
-    'https://opis-cdn.tinkoffjournal.ru/mercury/21-cats-mem.ry2dnstyhe4d..gif',
-]
-
 # Load quiz questions
 def load_questions():
     if os.path.exists('questions.json'):
@@ -274,36 +262,9 @@ def handle_answer(update: Update, context: CallbackContext) -> int:
             # Session finished
             final_score = user_scores.get(user_id, 0)
             total = len(plan) if plan else 10
-            # Decide which cat to send
-            success = final_score >= (total / 2.0)
-            if success:
-                cat_url = random.choice(HAPPY_CAT_URLS)
-                caption = (
-                    f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
-                    f"Молодец! Держи веселого котика 🐱"
-                )
-            else:
-                cat_url = random.choice(SAD_CAT_URLS)
-                caption = (
-                    f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
-                    f"Ничего, в следующий раз будет лучше. Вот грустный котик 😿"
-                )
-
-            try:
-                if str(cat_url).lower().endswith('.gif'):
-                    query.message.reply_animation(animation=cat_url, caption=caption)
-                else:
-                    query.message.reply_photo(photo=cat_url, caption=caption)
-            except Exception as e:
-                logger.warning('Не удалось отправить изображение: %s', e)
-                query.message.reply_text(
-                    f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
-                    f"Чтобы начать заново, введите /quiz или смените сложность через /difficulty."
-                )
-
-            # Follow-up tip
             query.message.reply_text(
-                "Чтобы начать заново, введите /quiz или смените сложность через /difficulty."
+                f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
+                f"Чтобы начать заново, введите /quiz или смените сложность через /difficulty."
             )
             # Reset session plan/index; keep difficulty
             user_question_list[user_id] = []
