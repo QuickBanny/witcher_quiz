@@ -24,6 +24,18 @@ user_difficulty = {}
 user_question_list = {}   # user_id -> list of 10 questions prepared for the session
 user_question_index = {}  # user_id -> current index in the prepared list (0..9)
 
+# Cat images for final result
+HAPPY_CAT_URLS = [
+    'https://cataas.com/cat/says/Ура?fontSize=48&fontColor=%23ffffff',
+    'https://cataas.com/cat/cute',
+    'https://placekitten.com/400/300',
+]
+SAD_CAT_URLS = [
+    'https://cataas.com/cat/sad',
+    'https://cataas.com/cat/says/Эх...%20в%20следующий%20раз!%20:(?fontSize=32&fontColor=%23ffffff',
+    'https://placekitten.com/320/240',
+]
+
 # Load quiz questions
 def load_questions():
     if os.path.exists('questions.json'):
@@ -262,9 +274,33 @@ def handle_answer(update: Update, context: CallbackContext) -> int:
             # Session finished
             final_score = user_scores.get(user_id, 0)
             total = len(plan) if plan else 10
+            # Decide which cat to send
+            success = final_score >= (total / 2.0)
+            if success:
+                cat_url = random.choice(HAPPY_CAT_URLS)
+                caption = (
+                    f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
+                    f"Молодец! Держи веселого котика 🐱"
+                )
+            else:
+                cat_url = random.choice(SAD_CAT_URLS)
+                caption = (
+                    f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
+                    f"Ничего, в следующий раз будет лучше. Вот грустный котик 😿"
+                )
+
+            try:
+                query.message.reply_photo(photo=cat_url, caption=caption)
+            except Exception as e:
+                logger.warning('Не удалось отправить изображение: %s', e)
+                query.message.reply_text(
+                    f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
+                    f"Чтобы начать заново, введите /quiz или смените сложность через /difficulty."
+                )
+
+            # Follow-up tip
             query.message.reply_text(
-                f"🏁 Квиз завершен! Ваш результат: {final_score} из {total}.\n"
-                f"Чтобы начать заново, введите /quiz или смените сложность через /difficulty."
+                "Чтобы начать заново, введите /quiz или смените сложность через /difficulty."
             )
             # Reset session plan/index; keep difficulty
             user_question_list[user_id] = []
