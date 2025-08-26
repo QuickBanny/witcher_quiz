@@ -290,7 +290,10 @@ def handle_answer(update: Update, context: CallbackContext) -> int:
                 )
 
             try:
-                query.message.reply_photo(photo=cat_url, caption=caption)
+                if str(cat_url).lower().endswith('.gif'):
+                    query.message.reply_animation(animation=cat_url, caption=caption)
+                else:
+                    query.message.reply_photo(photo=cat_url, caption=caption)
             except Exception as e:
                 logger.warning('Не удалось отправить изображение: %s', e)
                 query.message.reply_text(
