@@ -26,14 +26,14 @@ user_question_index = {}  # user_id -> current index in the prepared list (0..9)
 
 # Cat images for final result
 HAPPY_CAT_URLS = [
-    'https://cataas.com/cat/says/Ура?fontSize=48&fontColor=%23ffffff',
-    'https://cataas.com/cat/cute',
-    'https://placekitten.com/400/300',
+    'https://opis-cdn.tinkoffjournal.ru/mercury/03-cats-mem.ywhteipqsbyt..gif',
+    'https://opis-cdn.tinkoffjournal.ru/mercury/08-cats-mem.qzg8ghiayj9s..gif',
+    'https://opis-cdn.tinkoffjournal.ru/mercury/17-cats-mem.zlgxt6gqj3pj..gif',
 ]
 SAD_CAT_URLS = [
-    'https://cataas.com/cat/sad',
-    'https://cataas.com/cat/says/Эх...%20в%20следующий%20раз!%20:(?fontSize=32&fontColor=%23ffffff',
-    'https://placekitten.com/320/240',
+    'https://opis-cdn.tinkoffjournal.ru/mercury/14-cats-mem.ej4ktdsgtcdd..gif',
+    'https://opis-cdn.tinkoffjournal.ru/mercury/19-cats-mem.y9sdgxl6xbip..gif',
+    'https://opis-cdn.tinkoffjournal.ru/mercury/21-cats-mem.ry2dnstyhe4d..gif',
 ]
 
 # Load quiz questions
